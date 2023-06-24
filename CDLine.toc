@@ -3,6 +3,6 @@
 ## Notes: Tracking spells that are currently on cooldown with a neat UI
 ## SavedVariablesPerCharacter:
 ## Author: Lukasas
-## Version: 0.1.0
+## Version: 0.1.1
 
 MainFrame.xml
