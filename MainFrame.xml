@@ -1,0 +1,125 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\..\FrameXML\UI.xsd">
+	<Script file="Core.lua" />
+	<Frame name="CDLine_Frame" frameStrata="DIALOG" frameLevel="10" enableMouse="true" movable="true" hidden="false" parent="UIParent" inherits="BackdropTemplate">
+		<Size x="200" y="35" />
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" type="global"/>
+			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+			<KeyValue key="backdropBorderColorAlpha" value="0.10" type="number"/>
+		</KeyValues>
+		<Anchors>
+			<Anchor point="LEFT" />
+		</Anchors>
+		<Layers>
+			<Layer>
+				<FontString text="20" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+					<FontHeight val="8"/>
+					<Anchors>
+						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="5" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+					<Shadow>
+						<Offset x="5" y="0" />
+						<Color r="0" g="0" b="0" a="1"/>
+					</Shadow>
+				</FontString>
+				<FontString text="10" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+					<FontHeight val="8"/>
+					<Anchors>
+						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="20" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+					<Shadow>
+						<Offset x="5" y="0" />
+						<Color r="0" g="0" b="0" a="1"/>
+					</Shadow>
+				</FontString>
+				<FontString text="5" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+					<FontHeight val="8"/>
+					<Anchors>
+						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="35" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+					<Shadow>
+						<Offset x="5" y="0" />
+						<Color r="0" g="0" b="0" a="1"/>
+					</Shadow>
+				</FontString>
+				<FontString text="1" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+					<FontHeight val="8"/>
+					<Anchors>
+						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="60" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+					<Shadow>
+						<Offset x="5" y="0" />
+						<Color r="0" g="0" b="0" a="1"/>
+					</Shadow>
+				</FontString>
+				<FontString text="30" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+					<FontHeight val="8"/>
+					<Anchors>
+						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="95" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+					<Shadow>
+						<Offset x="5" y="0" />
+						<Color r="0" g="0" b="0" a="1"/>
+					</Shadow>
+				</FontString>
+				<FontString text="10" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+					<FontHeight val="8"/>
+					<Anchors>
+						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="135" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+					<Shadow>
+						<Offset x="5" y="0" />
+						<Color r="0" g="0" b="0" a="1"/>
+					</Shadow>
+				</FontString>
+				<FontString text="2" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+					<FontHeight val="8"/>
+					<Anchors>
+						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="180" y="0" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="1"/>
+					<Shadow>
+						<Offset x="5" y="0" />
+						<Color r="0" g="0" b="0" a="1"/>
+					</Shadow>
+				</FontString>
+			</Layer>
+		</Layers>
+
+		<Scripts>
+			<OnLoad inherit="prepend">
+				<!-- ILM_BUTTON:RegisterForDrag("LeftButton") -->
+				self:RegisterForDrag("LeftButton")
+				self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
+				self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
+			</OnLoad>
+			<OnEvent function="OnEventFunction"/>
+			<OnUpdate function="OnUpdate" />
+			<OnDragStart>
+				if self:IsMovable() then
+					self:StartMoving();
+				end
+			</OnDragStart>
+			<OnDragStop>
+				if self:IsMovable() then
+					self:StopMovingOrSizing();
+				end
+			</OnDragStop>
+		</Scripts>
+	</Frame>
+	<Button name="CooldownIcon" virtual="true">
+		<Size>
+			<AbsDimension x="20" y="20" />
+		</Size>
+		<NormalFont style="GameFontHighlightLeft"/>
+	</Button>
+
+</Ui>
