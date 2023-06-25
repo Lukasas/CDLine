@@ -1,4 +1,4 @@
-## Interface: 100002
+## Interface: 100100
 ## Title: CoolDown Line
 ## Notes: Tracking spells that are currently on cooldown with a neat UI
 ## SavedVariablesPerCharacter:
