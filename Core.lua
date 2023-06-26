@@ -64,7 +64,6 @@ function setupTimes()
 
 end
 
-
 local function prepareIcons()
     for idx = 1, 50 do
         local frame = CreateFrame('BUTTON', "spell" .. tostring(idx), CDLine_Frame, 'CooldownIconTemplate');
@@ -77,6 +76,8 @@ function InitializeCDLine()
     addonLoaded = true
 end
 
+local backupFramesIdx = 51
+
 local function getAvailableIconFrame()
     for idx = 1, 50 do
         if iconsBuffer[idx].inUse == false then
@@ -86,6 +87,9 @@ local function getAvailableIconFrame()
             return iconsBuffer[idx]
         end
     end
+    local frame = CreateFrame('BUTTON', "spell" .. tostring(backupFramesIdx), CDLine_Frame, 'CooldownIconTemplate');
+    iconsBuffer[backupFramesIdx] = {inUse = false, frame = frame, texture = frame:CreateTexture()}
+    backupFramesIdx = backupFramesIdx + 1
 end
 
 local function dump(o)
