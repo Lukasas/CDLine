@@ -9,6 +9,7 @@ jobs:
     steps:
     - name: Checkout repository code
       uses: actions/checkout@v3
+    - name: Removing unnecessary files
       run: rm -rf .github
     - name: Zipping
       run: zip CDLine-${{github.ref_name}}.zip Core.lua MainFrame.xml LICENSE README.md CDLine.toc
