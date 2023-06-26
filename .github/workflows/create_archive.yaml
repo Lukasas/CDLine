@@ -9,12 +9,8 @@ jobs:
     steps:
     - name: Checkout repository code
       uses: actions/checkout@v3
-    - name: Performing somethingg
-      run: echo "Hello World"
-    - name: Listing files
-      run: ls ${{ github.workspace }}
     - name: Zipping
-      run: zip HelloWorld.zip Core.lua MainFrame.xml LICENSE README.md CDLine.toc
+      run: zip CDLine-${{github.ref_name}}.zip Core.lua MainFrame.xml LICENSE README.md CDLine.toc
     - name: Create Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
