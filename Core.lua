@@ -4,7 +4,8 @@ SLASH_REC1 = "/cdline"
 local movable = true
 local spellsOnCooldown = {}
 local cdline_icon_frames = {}
-local iconDim = 20;
+local iconDim = 20
+local addonLoaded = false
 local cdline_stage = {
     start = 1,
     ending = 2,
@@ -73,6 +74,7 @@ end
 
 function InitializeCDLine()
     prepareIcons()
+    addonLoaded = true
 end
 
 local function getAvailableIconFrame()
@@ -122,6 +124,10 @@ function events:PLAYER_LOGIN()
 end
 
 function events:UNIT_SPELLCAST_SUCCEEDED(who, cast, spellid)
+    if addonLoaded == false then
+        return
+    end
+
     if who == "player" then
         local curIdx = cdl_idx
         cdl_idx = cdl_idx + 1
