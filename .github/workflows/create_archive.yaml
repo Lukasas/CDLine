@@ -17,4 +17,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         token: ${{ secrets.GITHUB_TOKEN }}
-      run: hub release create -a "CDLine-${{github.ref_name}}" -m "CDLine ${{github.ref_name}}" "${{github.ref_name}}"
+      run: hub release create -a "CDLine-${{github.ref_name}}.zip" -m "CDLine ${{github.ref_name}}" "${{github.ref_name}}"
