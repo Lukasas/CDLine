@@ -10,9 +10,9 @@ jobs:
     - name: Checkout repository code
       uses: actions/checkout@v3
     - name: Zipping
-      run: zip HelloWorld.zip Core.lua MainFrame.xml LICENSE README.md CDLine.toc
+      run: zip CDLine-${{github.ref_name}}.zip Core.lua MainFrame.xml LICENSE README.md CDLine.toc
     - name: Create Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         token: ${{ secrets.GITHUB_TOKEN }}
-      run: hub release create -m "HelloWorld.zip" "$(date +%Y%m%d%H%M%S)"
+      run: hub release create -a "CDLine-${{github.ref_name}}.zip" -m "CDLine ${{github.ref_name}}" "${{github.ref_name}}"
