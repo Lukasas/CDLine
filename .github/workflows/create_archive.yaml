@@ -9,10 +9,6 @@ jobs:
     steps:
     - name: Checkout repository code
       uses: actions/checkout@v3
-    - name: Performing somethingg
-      run: echo "Hello World"
-    - name: Listing files
-      run: ls ${{ github.workspace }}
     - name: Zipping
       run: zip HelloWorld.zip Core.lua MainFrame.xml LICENSE README.md CDLine.toc
     - name: Create Release
