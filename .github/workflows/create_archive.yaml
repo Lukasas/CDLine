@@ -15,4 +15,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         token: ${{ secrets.GITHUB_TOKEN }}
-      run: hub release create -m "HelloWorld.zip" "$(date +%Y%m%d%H%M%S)"
+      run: hub release create -m "CDLine ${{github.ref_name}}" "${{github.ref_name}}"
