@@ -2,6 +2,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
 	<Script file="Core.lua" />
+	<Button name="CooldownIconTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="20" y="20" />
+		</Size>
+		<NormalFont style="GameFontHighlightLeft"/>
+	</Button>
 	<Frame name="CDLine_Frame" frameStrata="DIALOG" frameLevel="10" enableMouse="true" movable="true" hidden="false" parent="UIParent" inherits="BackdropTemplate">
 		<Size x="200" y="35" />
 		<KeyValues>
@@ -97,6 +103,7 @@
 		<Scripts>
 			<OnLoad inherit="prepend">
 				<!-- ILM_BUTTON:RegisterForDrag("LeftButton") -->
+				InitializeCDLine()
 				self:RegisterForDrag("LeftButton")
 				self:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
 				self:RegisterEvent("SPELL_UPDATE_COOLDOWN")
@@ -115,11 +122,5 @@
 			</OnDragStop>
 		</Scripts>
 	</Frame>
-	<Button name="CooldownIcon" virtual="true">
-		<Size>
-			<AbsDimension x="20" y="20" />
-		</Size>
-		<NormalFont style="GameFontHighlightLeft"/>
-	</Button>
 
 </Ui>
