@@ -64,8 +64,9 @@ function setupTimes()
 
 end
 
+local totalFramesCount = 50
 local function prepareIcons()
-    for idx = 1, 50 do
+    for idx = 1, totalFramesCount do
         local frame = CreateFrame('BUTTON', "spell" .. tostring(idx), CDLine_Frame, 'CooldownIconTemplate');
         iconsBuffer[idx] = {inUse = false, frame = frame, texture = frame:CreateTexture()}
     end
@@ -76,10 +77,9 @@ function InitializeCDLine()
     addonLoaded = true
 end
 
-local backupFramesIdx = 51
 
 local function getAvailableIconFrame()
-    for idx = 1, 50 do
+    for idx = 1, totalFramesCount do
         if iconsBuffer[idx].inUse == false then
             iconsBuffer[idx].frame:Show()
             iconsBuffer[idx].frame:SetSize(iconDim, iconDim);
@@ -87,9 +87,9 @@ local function getAvailableIconFrame()
             return iconsBuffer[idx]
         end
     end
-    local frame = CreateFrame('BUTTON', "spell" .. tostring(backupFramesIdx), CDLine_Frame, 'CooldownIconTemplate');
-    iconsBuffer[backupFramesIdx] = {inUse = false, frame = frame, texture = frame:CreateTexture()}
-    backupFramesIdx = backupFramesIdx + 1
+    totalFramesCount = totalFramesCount + 1
+    local frame = CreateFrame('BUTTON', "spell" .. tostring(totalFramesCount), CDLine_Frame, 'CooldownIconTemplate');
+    iconsBuffer[totalFramesCount] = {inUse = false, frame = frame, texture = frame:CreateTexture()}
 end
 
 local function dump(o)
@@ -174,7 +174,9 @@ function OnUpdate(self, elapsed)
     for k, v in pairs(spellsOnCooldown) do
         idx = idx + 1
         start, duration, enabled, mod = GetSpellCooldown(v.spellID)
-        if v.stage == cdline_stage.start then
+        if spellsOnCooldown[k].iconFrame == nil then
+            spellsOnCooldown[k] = nil
+        elseif v.stage == cdline_stage.start then
             if start > 0 and duration > 0 then
                 local counting = GetTime() - start
                 local left = duration - counting
@@ -184,46 +186,9 @@ function OnUpdate(self, elapsed)
                 local set = false
 
                 percentage, stage, w = calcTimingAndOffset(left, duration)
-
-                -- refactor - tables and cycles
-                -- if left > times.m20 then
-                --     percentage = (left - times.m20) / (duration - times.m20)
-                --     stage = 0
-                --     w = pos.m20
-                -- elseif left > times.m10 then
-                --     percentage = (left - times.m10) / (times.m20 - times.m10)
-                --     stage = pos.m20
-                --     w = pos.m10 - stage
-                -- elseif left > times.m5 then
-                --     percentage = (left - times.m5) / (times.m10 - times.m5)
-                --     stage = pos.m10
-                --     w = pos.m5 - stage
-                -- elseif left > times.m1 then
-                --     percentage = (left - times.m1) / (times.m5 - times.m1)
-                --     stage = pos.m5
-                --     w = pos.m1 - stage
-                -- elseif left > times.s30 then
-                --     percentage = (left - times.s30) / (times.m1 - times.s30)
-                --     stage = pos.m1
-                --     w = pos.s30 - stage
-                -- elseif left > times.s10 then
-                --     percentage = (left - times.s10) / (times.s30 - times.s10)
-                --     stage = pos.s30
-                --     w = pos.s10 - stage
-                -- elseif left > times.s2 then
-                --     percentage = (left - times.s2) / (times.s10 - times.s2)
-                --     stage = pos.s10
-                --     w = pos.s2 - stage
-                -- else
-                --     percentage = left / times.s2
-                --     stage = pos.s2
-                --     w = cdLw - stage
-                -- end
                 percentage = 1 - percentage
-
                 spellsOnCooldown[k].iconFrame.frame:SetPoint('CENTER', CDLine_Frame, 'LEFT', stage + (w) * percentage, 0)
                 spellsOnCooldown[k].endpoint = (cdLw) * percentage
-                -- print("Spell" , tostring(k) , " is on cooldown for " , tostring(takes) , " more seconds.")
             else
                 if v.endpoint == nil then
                     spellsOnCooldown[k].stage = cdline_stage.ended
