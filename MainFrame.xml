@@ -11,9 +11,9 @@
 	<Frame name="CDLine_Frame" frameStrata="DIALOG" frameLevel="10" enableMouse="true" movable="true" hidden="false" parent="UIParent" inherits="BackdropTemplate">
 		<Size x="200" y="35" />
 		<KeyValues>
-			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" type="global"/>
-			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-			<KeyValue key="backdropBorderColorAlpha" value="0" type="number"/>
+			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_0_0" type="global"/>
+			<!-- <KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+			<KeyValue key="backdropBorderColorAlpha" value="1" type="number"/> -->
 		</KeyValues>
 		<Anchors>
 			<Anchor point="LEFT" />

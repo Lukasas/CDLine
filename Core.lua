@@ -1,4 +1,13 @@
 ---------------- Globals  ----------------
+
+BACKDROP_DIALOG_0_0 = {
+	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+	tile = true,
+	tileEdge = true,
+	tileSize = 32,
+	edgeSize = 0,
+    insets = {left=-4, right=-4, top=4, bottom=4}
+};
 SLASH_REC1 = "/cdline"
 local movable = true
 local spellsOnCooldown = {}
@@ -251,7 +260,7 @@ local function clearIconsPoints()
     end
 end
 
-function flipXY(frm, rev, anchor, flip)
+local function flipXY(frm, rev, anchor, flip)
     local point, relTo, relPoint, offX, offY = frm:GetPoint()
     if rev == true then
         offX, offY = -offX, -offY
@@ -269,6 +278,10 @@ function dropDown:setOrientation(orie)
         ((currentOri == ori.vert or currentOri == ori.vertr) and (orie == ori.hori or orie == ori.horir)) then
         local sx, sy = CDLine_Frame:GetSize()
         CDLine_Frame:SetSize(sy, sx)
+        BACKDROP_DIALOG_0_0.insets = {left=BACKDROP_DIALOG_0_0.insets.top, right=BACKDROP_DIALOG_0_0.insets.bottom,
+        top=BACKDROP_DIALOG_0_0.insets.left, bottom=BACKDROP_DIALOG_0_0.insets.right}
+        CDLine_Frame.backdropInfo = BACKDROP_DIALOG_0_0
+        CDLine_Frame:ApplyBackdrop()
         flip = true
     end
 
