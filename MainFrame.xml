@@ -13,14 +13,14 @@
 		<KeyValues>
 			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" type="global"/>
 			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-			<KeyValue key="backdropBorderColorAlpha" value="0.10" type="number"/>
+			<KeyValue key="backdropBorderColorAlpha" value="0" type="number"/>
 		</KeyValues>
 		<Anchors>
 			<Anchor point="LEFT" />
 		</Anchors>
 		<Layers>
 			<Layer>
-				<FontString text="20" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+				<FontString name="m20" text="20" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
 					<FontHeight val="8"/>
 					<Anchors>
 						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="5" y="0" />
@@ -31,7 +31,7 @@
 						<Color r="0" g="0" b="0" a="1"/>
 					</Shadow>
 				</FontString>
-				<FontString text="10" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+				<FontString name="m10" text="10" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
 					<FontHeight val="8"/>
 					<Anchors>
 						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="20" y="0" />
@@ -42,7 +42,7 @@
 						<Color r="0" g="0" b="0" a="1"/>
 					</Shadow>
 				</FontString>
-				<FontString text="5" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+				<FontString name="m5" text="5" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
 					<FontHeight val="8"/>
 					<Anchors>
 						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="35" y="0" />
@@ -53,7 +53,7 @@
 						<Color r="0" g="0" b="0" a="1"/>
 					</Shadow>
 				</FontString>
-				<FontString text="1" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+				<FontString name="m1" text="1" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
 					<FontHeight val="8"/>
 					<Anchors>
 						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="60" y="0" />
@@ -64,7 +64,7 @@
 						<Color r="0" g="0" b="0" a="1"/>
 					</Shadow>
 				</FontString>
-				<FontString text="30" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+				<FontString name="s30" text="30" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
 					<FontHeight val="8"/>
 					<Anchors>
 						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="95" y="0" />
@@ -75,7 +75,7 @@
 						<Color r="0" g="0" b="0" a="1"/>
 					</Shadow>
 				</FontString>
-				<FontString text="10" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+				<FontString name="s10" text="10" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
 					<FontHeight val="8"/>
 					<Anchors>
 						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="135" y="0" />
@@ -86,7 +86,7 @@
 						<Color r="0" g="0" b="0" a="1"/>
 					</Shadow>
 				</FontString>
-				<FontString text="2" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
+				<FontString name="s2" text="2" font="Fonts\FRIZQT__.TTF" justifyH="LEFT" justifyV="CENTER" virtual="true">
 					<FontHeight val="8"/>
 					<Anchors>
 						<Anchor point="CENTER" relativePoint="LEFT" relativeTo="$parent" x="180" y="0" />
@@ -110,6 +110,7 @@
 			</OnLoad>
 			<OnEvent function="OnEventFunction"/>
 			<OnUpdate function="OnUpdate" />
+			<OnMouseUp function="OnMouseUp" />
 			<OnDragStart>
 				if self:IsMovable() then
 					self:StartMoving();

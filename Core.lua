@@ -1,5 +1,4 @@
 ---------------- Globals  ----------------
-
 SLASH_REC1 = "/cdline"
 local movable = true
 local spellsOnCooldown = {}
@@ -36,16 +35,67 @@ local timingIdxMap = {
     s0 = 7
 }
 
-local timings = {
-    {text="20", offset=5, time=20*60},
-    {text="10", offset=20, time=10*60},
-    {text="5", offset=35, time=5*60},
-    {text="1", offset=60, time=1*60},
-    {text="30", offset=95, time=30},
-    {text="10", offset=135, time=10},
-    {text="2", offset=180, time=2},
-    {text="", offset=200, time=0}
+local ori = {
+    hori = {
+        swxy = false,
+        rev = false,
+        anchor = "LEFT"
+    },
+    horir = {
+        swxy = false,
+        rev = true,
+        anchor = "RIGHT"
+    },
+    vert = {
+        swxy = true,
+        rev = false,
+        anchor = "BOTTOM"
+    },
+    vertr = {
+        swxy = true,
+        rev = true,
+        anchor = "TOP"
+    }
 }
+
+local timings = {{
+    text = "20",
+    offset = 5,
+    time = 20 * 60
+}, {
+    text = "10",
+    offset = 20,
+    time = 10 * 60
+}, {
+    text = "5",
+    offset = 35,
+    time = 5 * 60
+}, {
+    text = "1",
+    offset = 60,
+    time = 1 * 60
+}, {
+    text = "30",
+    offset = 95,
+    time = 30
+}, {
+    text = "10",
+    offset = 135,
+    time = 10
+}, {
+    text = "2",
+    offset = 180,
+    time = 2
+}, {
+    text = "",
+    offset = 200,
+    time = 0
+}}
+
+local fontSize = 8
+local currentOri = ori.hori
+
+local dropDown = CreateFrame("Frame", "WPDemoContextMenu", UIParent, "UIDropDownMenuTemplate")
 
 local iconsBuffer = {}
 ---------------- Timers ----------------
@@ -59,7 +109,6 @@ local function ShowMinimapTooltip()
     GameTooltip:Show()
 end
 
-
 function setupTimes()
 
 end
@@ -68,7 +117,11 @@ local totalFramesCount = 50
 local function prepareIcons()
     for idx = 1, totalFramesCount do
         local frame = CreateFrame('BUTTON', "spell" .. tostring(idx), CDLine_Frame, 'CooldownIconTemplate');
-        iconsBuffer[idx] = {inUse = false, frame = frame, texture = frame:CreateTexture()}
+        iconsBuffer[idx] = {
+            inUse = false,
+            frame = frame,
+            texture = frame:CreateTexture()
+        }
     end
 end
 
@@ -76,7 +129,6 @@ function InitializeCDLine()
     prepareIcons()
     addonLoaded = true
 end
-
 
 local function getAvailableIconFrame()
     for idx = 1, totalFramesCount do
@@ -89,7 +141,12 @@ local function getAvailableIconFrame()
     end
     totalFramesCount = totalFramesCount + 1
     local frame = CreateFrame('BUTTON', "spell" .. tostring(totalFramesCount), CDLine_Frame, 'CooldownIconTemplate');
-    iconsBuffer[totalFramesCount] = {inUse = false, frame = frame, texture = frame:CreateTexture()}
+    iconsBuffer[totalFramesCount] = {
+        inUse = false,
+        frame = frame,
+        texture = frame:CreateTexture()
+    }
+    return iconsBuffer[totalFramesCount]
 end
 
 local function dump(o)
@@ -121,6 +178,114 @@ end
 
 ---------------- Buttons Click ----------------
 
+local function buildDropDown()
+    UIDropDownMenu_Initialize(dropDown, function(self, level, menuList)
+        local info = UIDropDownMenu_CreateInfo()
+        if (level or 1) == 1 then
+            info.text = "Font Scale"
+            info.checked = false
+            info.menuList, info.hasArrow = "fSize", true
+            UIDropDownMenu_AddButton(info)
+
+            info.text = "Orientation"
+            info.checked = false
+            info.menuList, info.hasArrow = "lineOri", true
+            UIDropDownMenu_AddButton(info)
+
+        else
+            if menuList == "fSize" then
+                info.func = self.setFontSize
+                for i = 1, 3, 0.25 do
+                    info.text = i
+                    info.arg1 = i
+                    info.checked = i == fontSize
+                    UIDropDownMenu_AddButton(info, level)
+                end
+            elseif menuList == "lineOri" then
+                info.func = self.setOrientation
+                info.text = "Horizontal"
+                info.arg1 = ori.hori
+                info.checked = currentOri == info.arg1
+                UIDropDownMenu_AddButton(info, level)
+                info.text = "Horizontal (Reversed)"
+                info.arg1 = ori.horir
+                info.checked = currentOri == info.arg1
+                UIDropDownMenu_AddButton(info, level)
+                info.text = "Vertical"
+                info.arg1 = ori.vert
+                info.checked = currentOri == info.arg1
+                UIDropDownMenu_AddButton(info, level)
+                info.text = "Vertical (Reversed)"
+                info.arg1 = ori.vertr
+                info.checked = currentOri == info.arg1
+                UIDropDownMenu_AddButton(info, level)
+            end
+            -- Display a nested group of 10 favorite number options
+        end
+    end)
+end
+
+local function applyFontSize()
+    local val = fontSize
+    m20:SetTextScale(val)
+    m10:SetTextScale(val)
+    m5:SetTextScale(val)
+    m1:SetTextScale(val)
+    s30:SetTextScale(val)
+    s10:SetTextScale(val)
+    s2:SetTextScale(val)
+end
+
+local function positionTexts()
+
+end
+
+function dropDown:setFontSize(value)
+    fontSize = value
+    applyFontSize()
+end
+
+local function clearIconsPoints()
+    for i = 1, totalFramesCount do
+        iconsBuffer[i].frame:ClearAllPoints()
+    end
+end
+
+function flipXY(frm, rev, anchor, flip)
+    local point, relTo, relPoint, offX, offY = frm:GetPoint()
+    if rev == true then
+        offX, offY = -offX, -offY
+    end
+    if flip == true then
+        offX, offY = offY, offX
+    end
+    frm:ClearAllPoints()
+    frm:SetPoint(point, relTo, anchor, offX, offY)
+end
+
+function dropDown:setOrientation(orie)
+    local flip = false;
+    if ((currentOri == ori.hori or currentOri == ori.horir) and (orie == ori.vert or orie == ori.vertr)) or
+        ((currentOri == ori.vert or currentOri == ori.vertr) and (orie == ori.hori or orie == ori.horir)) then
+        local sx, sy = CDLine_Frame:GetSize()
+        CDLine_Frame:SetSize(sy, sx)
+        flip = true
+    end
+
+    flipXY(m20, not (orie.rev == currentOri.rev), orie.anchor, flip)
+    flipXY(m10, not (orie.rev == currentOri.rev), orie.anchor, flip)
+    flipXY(m5, not (orie.rev == currentOri.rev), orie.anchor, flip)
+    flipXY(m1, not (orie.rev == currentOri.rev), orie.anchor, flip)
+    flipXY(s30, not (orie.rev == currentOri.rev), orie.anchor, flip)
+    flipXY(s10, not (orie.rev == currentOri.rev), orie.anchor, flip)
+    flipXY(s2, not (orie.rev == currentOri.rev), orie.anchor, flip)
+    currentOri = orie
+end
+
+function applyLayout()
+    applyFontSize()
+
+end
 ---------------- Events functions ----------------
 local events = {}
 
@@ -135,7 +300,11 @@ function events:UNIT_SPELLCAST_SUCCEEDED(who, cast, spellid)
     if who == "player" then
         local curIdx = cdl_idx
         cdl_idx = cdl_idx + 1
-        spellsOnCooldown[curIdx] = {stage = cdline_stage.start, spellID = spellid, iconFrame = getAvailableIconFrame()}
+        spellsOnCooldown[curIdx] = {
+            stage = cdline_stage.start,
+            spellID = spellid,
+            iconFrame = getAvailableIconFrame()
+        }
         -- spellsOnCooldown[curIdx]['frame']:SetPoint('CENTER', CDLine_Frame, 'LEFT', 0, 0)
         spellsOnCooldown[curIdx].iconFrame.inUse = true
         spellsOnCooldown[curIdx].iconFrame.texture:SetTexture(GetSpellTexture(spellid))
@@ -146,7 +315,6 @@ end
 function events:SPELL_UPDATE_COOLDOWN()
 
 end
-
 
 local function calcTimingAndOffset(left, duration)
     local prevTime = duration
@@ -184,11 +352,23 @@ function OnUpdate(self, elapsed)
                 local stage = 0;
                 local prevTime = duration
                 local set = false
+                local posBaseX, posBaseY = 0, 0
 
                 percentage, stage, w = calcTimingAndOffset(left, duration)
                 percentage = 1 - percentage
-                spellsOnCooldown[k].iconFrame.frame:SetPoint('CENTER', CDLine_Frame, 'LEFT', stage + (w) * percentage, 0)
-                spellsOnCooldown[k].endpoint = (cdLw) * percentage
+                local advancing = w * percentage
+                advancing = stage + advancing
+                local x, y = advancing, 0;
+                if currentOri.swxy == true then
+                    x, y = y, x
+                end
+                if currentOri.rev == true then
+                    x, y = -x, -y
+                end
+
+                -- spellsOnCooldown[k].iconFrame.frame:SetPoint('CENTER', CDLine_Frame, 'LEFT', x, y)
+                spellsOnCooldown[k].iconFrame.frame:SetPoint('CENTER', CDLine_Frame, currentOri.anchor, x, y)
+                spellsOnCooldown[k].endpoint = {x=x, y=y}
             else
                 if v.endpoint == nil then
                     spellsOnCooldown[k].stage = cdline_stage.ended
@@ -199,13 +379,28 @@ function OnUpdate(self, elapsed)
             end
         elseif v.stage == cdline_stage.ending then
             local percentage = (GetTime() - v.timeEnding) / 0.1
-            spellsOnCooldown[k].iconFrame.frame:SetPoint('CENTER', CDLine_Frame, 'LEFT', v.endpoint + (iconDim * percentage), 0)
-            local newSize = iconDim + (50*percentage)
+            local alphaSize = percentage
+            -- spellsOnCooldown[k].iconFrame.frame:SetPoint('CENTER', CDLine_Frame, 'LEFT',
+            local runX, runY = 0, 0
+            if currentOri.rev == true then
+                percentage = -percentage
+            end
+
+            if v.endpoint.x == 0 then
+                runY = v.endpoint.y + (iconDim * percentage)
+            end
+
+            if v.endpoint.y == 0 then
+                runX = v.endpoint.x + (iconDim * percentage)
+            end
+
+            spellsOnCooldown[k].iconFrame.frame:SetPoint('CENTER', CDLine_Frame, currentOri.anchor, runX, runY)
+            local newSize = iconDim + (50 * alphaSize)
             spellsOnCooldown[k].iconFrame.frame:SetSize(newSize, newSize);
-            if percentage >= 1 then
+            if alphaSize >= 1 then
                 spellsOnCooldown[k].stage = cdline_stage.ended
             else
-                spellsOnCooldown[k].iconFrame.frame:SetAlpha(1 - percentage);
+                spellsOnCooldown[k].iconFrame.frame:SetAlpha(1 - alphaSize);
             end
         elseif v.stage == cdline_stage.ended then
             spellsOnCooldown[k].iconFrame.frame:Hide()
@@ -215,15 +410,20 @@ function OnUpdate(self, elapsed)
     end
 end
 
-
 ---------------- Events handler ----------------
 
 function OnEventFunction(self, event, ...)
     events[event](self, ...)
 end
 
----------------- Slash Commands ----------------
+function OnMouseUp(self, button)
+    if button == "RightButton" then
+        buildDropDown()
+        ToggleDropDownMenu(1, nil, dropDown, "cursor", 3, -3)
+    end
+end
 
+---------------- Slash Commands ----------------
 
 function showFrame(msg, editBox)
     CDLine_Frame:Show()
